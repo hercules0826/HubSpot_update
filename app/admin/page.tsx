@@ -1,17 +1,19 @@
-// ...admin main page...
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import AddListingModal from "./components/AddListingModal";
+import EditListingModal from "./components/EditListingModal";
 import ListingTable from "./components/ListingTable";
 import StatsOverview from "./components/StatsOverview";
 import AnalyticsDashboard from "./components/AnalyticsDashboard";
 import { Button } from "@/components/Button";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import FAQPoliciesManager from "./components/FAQPolicesManager";
 
 export default function AdminPage() {
-  const [open, setOpen] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
+  const [editListing, setEditListing] = useState(null);
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -28,26 +30,37 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="bg-beige min-h-screen py-16 px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-10">
-          <h1 className="text-4xl font-heading text-sageGreen">Admin Dashboard</h1>
-          <Button onClick={() => setOpen(true)}>+ Add New Listing</Button>
+    <main className="bg-beige min-h-screen py-16 px-6 md:px-8">
+      <div className="max-w-7xl mx-auto space-y-10">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <h1 className="text-4xl md:text-5xl font-heading text-sageGreen">
+            Admin Dashboard
+          </h1>
+          <Button onClick={() => setOpenAdd(true)}>+ Add New Listing</Button>
         </div>
 
         <StatsOverview />
         <AnalyticsDashboard />
+        <FAQPoliciesManager />
 
+        {/* Listings Table */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="mt-10"
         >
-          <ListingTable />
+          <ListingTable onEdit={setEditListing} />
         </motion.div>
 
-        {open && <AddListingModal onClose={() => setOpen(false)} />}
+        {openAdd && <AddListingModal onClose={() => setOpenAdd(false)} />}
+        {editListing && (
+          <EditListingModal
+            listing={editListing}
+            onClose={() => setEditListing(null)}
+          />
+        )}
       </div>
     </main>
   );
