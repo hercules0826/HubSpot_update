@@ -32,7 +32,7 @@ export default function ResultsPage() {
         whyRecommended: "Best match for comfort and safety priorities.",
         lat: 39.9,
         lng: -75.0,
-        address: "123 Main St, Cherry Hill, NJ",
+        address: "1600 Amphitheatre Parkway, Mountain View, CA 94043",
         phone: "(856) 555-2025",
         image: "/images/community1.jpg",
       },
@@ -55,7 +55,7 @@ export default function ResultsPage() {
     <section className="flex flex-col md:flex-row min-h-screen">
       {/* Left Side — Map */}
       <div className="md:w-1/2 w-full h-96 md:h-auto sticky top-0">
-        {/* <MapView communities={communities} /> */}
+        <MapView communities={communities} />
       </div>
 
       {/* Right Side — List */}

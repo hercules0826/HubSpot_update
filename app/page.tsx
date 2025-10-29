@@ -1,14 +1,15 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { FaRegHeart, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-beige text-grayText font-body">
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center py-24 px-6 bg-gradient-to-b from-sageMint/50 to-white">
+      <section className="flex flex-col items-center justify-center text-center py-24 px-6 bg-gradient-to-b from-sageMint/60 to-beige">
         <motion.h1
-          className="text-5xl md:text-6xl font-heading text-sageGreen mb-6"
+          className="text-5xl md:text-6xl font-heading text-sageGreen mb-6 drop-shadow-lg"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
@@ -28,13 +29,13 @@ export default function HomePage() {
         <div className="flex gap-4">
           <Link
             href="/care-discovery"
-            className="px-8 py-3 bg-sageGreen text-white rounded-2xl hover:bg-sageHover transition-all shadow-md"
+            className="px-8 py-3 bg-sageGreen text-white rounded-2xl hover:bg-sageHover transition-all shadow-xl font-semibold text-lg"
           >
             Start Here
           </Link>
           <Link
-            href="/admin"
-            className="px-8 py-3 border-2 border-sageGreen text-sageGreen rounded-2xl hover:bg-sageMint transition-all"
+            href="/login"
+            className="px-8 py-3 border-2 border-sageGreen text-sageGreen rounded-2xl hover:bg-sageMint transition-all font-semibold text-lg"
           >
             Log In
           </Link>
@@ -56,35 +57,42 @@ export default function HomePage() {
             {
               title: "Tell Us What Matters",
               desc: "Share your family’s priorities — safety, independence, comfort, or specialized care.",
+              icon: <FaRegHeart className="text-sageGreen text-4xl mb-2" />,
             },
             {
               title: "Discover Local Options",
               desc: "See nearby communities that match your loved one’s medical, social, and budget needs.",
+              icon: <FaMapMarkerAlt className="text-sageGreen text-4xl mb-2" />,
             },
             {
               title: "Connect Instantly",
               desc: "Get connected with trusted advisors who can guide you every step of the way.",
+              icon: <FaUserFriends className="text-sageGreen text-4xl mb-2" />,
             },
           ].map((item, i) => (
             <motion.div
               key={i}
-              className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition-all"
+              className="bg-white rounded-2xl shadow-md p-8 hover:shadow-2xl transition-all border border-sageMint/30"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
+              {item.icon}
               <h3 className="text-xl font-heading text-sageGreen mb-3">
                 {item.title}
               </h3>
-              <p>{item.desc}</p>
+              <p className="text-grayText text-base">{item.desc}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="mt-20 py-10 bg-sageGreen text-white text-center text-sm">
-        <p>SAGE Promise — 100% Free · 100% Local · 100% Compassionate</p>
+      <footer className="mt-20 py-10 bg-gradient-to-r from-sageGreen to-sageHover text-white text-center text-sm shadow-inner">
+        <p className="mb-2 font-semibold">
+          SAGE Promise — 100% Free · 100% Local · 100% Compassionate
+        </p>
+        <p className="opacity-80">© 2025 SAGE Senior Advisors</p>
       </footer>
     </main>
   );

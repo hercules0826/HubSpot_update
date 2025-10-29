@@ -5,10 +5,27 @@ import { motion } from "framer-motion";
 import AddListingModal from "./components/AddListingModal";
 import ListingTable from "./components/ListingTable";
 import StatsOverview from "./components/StatsOverview";
+import AnalyticsDashboard from "./components/AnalyticsDashboard";
 import { Button } from "@/components/Button";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function AdminPage() {
   const [open, setOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  if (status === "loading") return <p className="text-center mt-10">Loading...</p>;
+
+  if (!session || !session.user || (session.user as any).role !== "admin") {
+    if (typeof window !== "undefined") router.replace("/login");
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <h2 className="text-2xl font-semibold mb-4">Unauthorized</h2>
+        <p>Please log in as an admin to access the dashboard.</p>
+      </div>
+    );
+  }
 
   return (
     <main className="bg-beige min-h-screen py-16 px-8">
@@ -19,6 +36,7 @@ export default function AdminPage() {
         </div>
 
         <StatsOverview />
+        <AnalyticsDashboard />
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
