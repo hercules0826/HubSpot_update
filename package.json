@@ -1,0 +1,25 @@
+{
+  "name": "sage-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "framer-motion": "^10.18.0",
+    "next": "^14.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.14"
+  },
+  "devDependencies": {
+    "@types/node": "24.9.2",
+    "@types/react": "19.2.2",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8",
+    "typescript": "5.9.3"
+  }
+}

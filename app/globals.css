@@ -1,0 +1,18 @@
+/* ...global styles... */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth scrolling and soft transitions */
+html {
+  scroll-behavior: smooth;
+}
+body {
+  transition: background-color 0.3s ease;
+}
+
+/* Accessibility: focus outline */
+a:focus, button:focus {
+  outline: 2px solid #2F5D50;
+  outline-offset: 3px;
+}
