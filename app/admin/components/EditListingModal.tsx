@@ -2,24 +2,21 @@
 import { useState } from "react";
 import { Button } from "@/components/Button";
 
-export default function AddListingModal({ onClose }: { onClose: () => void }) {
-  const [form, setForm] = useState({
-    name: "",
-    address: "",
-    priceRange: "",
-    careType: "",
-    amenities: "",
-    photos: "",
-    phone: "",
-    email: "",
-  });
+export default function EditListingModal({
+  listing,
+  onClose,
+}: {
+  listing: any;
+  onClose: () => void;
+}) {
+  const [form, setForm] = useState(listing);
 
   const handleChange = (e: any) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = () => {
-    console.log("New listing submitted:", form);
-    alert("Listing added successfully!");
+  const handleSave = () => {
+    console.log("Updated listing:", form);
+    alert("Listing updated!");
     onClose();
   };
 
@@ -34,7 +31,7 @@ export default function AddListingModal({ onClose }: { onClose: () => void }) {
         </button>
 
         <h2 className="text-2xl font-heading text-sageGreen mb-6">
-          Add New Listing
+          Edit Listing
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -58,7 +55,7 @@ export default function AddListingModal({ onClose }: { onClose: () => void }) {
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit}>Save Listing</Button>
+          <Button onClick={handleSave}>Save Changes</Button>
         </div>
       </div>
     </div>

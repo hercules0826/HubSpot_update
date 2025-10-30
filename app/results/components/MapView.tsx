@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || "";
+// mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || "";
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || "AIzaSyCxmDyoubkruxw7pWtyLbFChkvSoKeWLfc";
 
 export default function MapView({ communities }: { communities: any[] }) {
   const mapContainer = useRef<HTMLDivElement>(null);
