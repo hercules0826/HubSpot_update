@@ -1,24 +1,29 @@
-// ...StepSocial component...
 "use client";
 import { motion } from "framer-motion";
 import { Button } from "@/components/Button";
 import { useState } from "react";
 
-export default function StepSocial({
-  next,
-  prev,
-}: {
-  next: () => void;
-  prev: () => void;
-}) {
+export default function StepSocial({ next, prev }: { next: () => void; prev: () => void }) {
   const [environment, setEnvironment] = useState<string | null>(null);
   const [lifestyle, setLifestyle] = useState<string[]>([]);
   const [comfort, setComfort] = useState<number>(3);
+  const [warning, setWarning] = useState(false);
 
   const toggleLifestyle = (item: string) => {
-    setLifestyle((prev) =>
-      prev.includes(item) ? prev.filter((x) => x !== item) : [...prev, item]
-    );
+    // If selected already, remove it
+    if (lifestyle.includes(item)) {
+      setLifestyle((prev) => prev.filter((x) => x !== item));
+      return;
+    }
+
+    // Limit to 3 choices
+    if (lifestyle.length >= 3) {
+      setWarning(true);
+      setTimeout(() => setWarning(false), 2000);
+      return;
+    }
+
+    setLifestyle((prev) => [...prev, item]);
   };
 
   return (
@@ -66,6 +71,7 @@ export default function StepSocial({
         <h3 className="font-heading text-lg text-sageGreen mb-3">
           Top 3 Lifestyle Priorities
         </h3>
+
         <div className="grid md:grid-cols-3 gap-4">
           {[
             "Dining Experience",
@@ -88,6 +94,13 @@ export default function StepSocial({
             </button>
           ))}
         </div>
+
+        {/* Warning Message */}
+        {warning && (
+          <p className="text-center text-red-500 text-sm mt-2">
+            You can only select up to 3 priorities ✨
+          </p>
+        )}
       </div>
 
       {/* Social Comfort Slider */}
@@ -119,7 +132,9 @@ export default function StepSocial({
         <Button variant="secondary" onClick={prev}>
           Back
         </Button>
-        <Button onClick={next}>Next</Button>
+        <Button onClick={next}>
+          Next
+        </Button>
       </div>
     </motion.div>
   );

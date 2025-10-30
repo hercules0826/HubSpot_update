@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { useState } from "react";
+
 
 // Example mock data (replace with your CMS or API later)
 const communityData = {
@@ -24,9 +26,10 @@ const communityData = {
     email: "info@willowgardens.com",
   },
   gallery: [
-    "/images/community1.jpg",
-    "/images/community2.jpg",
-    "/images/community3.jpg",
+    "/images/communities/pexels-photo-7031409.jpeg",
+    "/images/communities/pexels-photo-6434630.jpeg",
+    "/images/communities/pexels-photo-7551615.jpeg",
+    "/images/communities/pexels-photo-7551671.jpeg",
   ],
   recommendedReason:
     "We recommend Willow Gardens for families seeking high-quality memory care close to Cherry Hill. It balances safety, independence, and emotional warmth — ideal for loved ones needing extra daily support.",
@@ -34,6 +37,7 @@ const communityData = {
 
 export default function CommunityPage({ params }: { params: { slug: string } }) {
   const data = communityData;
+  const [currentIndex, setCurrentIndex] = useState(0);
   if (!data) return notFound();
 
   // JSON-LD Structured Data for SEO
@@ -129,24 +133,64 @@ export default function CommunityPage({ params }: { params: { slug: string } }) 
           </motion.div>
         </div>
 
-        {/* Gallery */}
+        {/* Gallery Carousel */}
         <motion.div
-          className="grid md:grid-cols-3 gap-4"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          className="relative"
         >
-          {data.gallery.map((src, i) => (
-            <Image
-              key={i}
-              src={src}
-              alt={`${data.name} photo ${i + 1}`}
-              width={500}
-              height={300}
-              className="rounded-xl object-cover h-64 w-full hover:scale-105 transition-transform duration-300"
-            />
-          ))}
+          <h3 className="text-2xl font-heading text-sageGreen mb-4">
+            Community Photos
+          </h3>
+
+          <div className="relative overflow-hidden rounded-2xl">
+            <div
+              className="flex transition-transform duration-500 ease-out"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / 3)}%)`,
+                width: `${(data.gallery.length / 3) * 100}%`,
+              }}
+            >
+              {data.gallery.map((src, i) => (
+                <div key={i} className="w-1/3 px-2">
+                  <Image
+                    src={src}
+                    alt={`${data.name} photo ${i + 1}`}
+                    width={500}
+                    height={300}
+                    className="rounded-xl object-cover h-64 w-full shadow-md hover:scale-[1.03] transition-all"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Left arrow */}
+            {currentIndex > 0 && (
+              <button
+                onClick={() => setCurrentIndex((prev) => Math.max(prev - 1, 0))}
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md rounded-full p-2 shadow-md hover:bg-white"
+              >
+                ◀
+              </button>
+            )}
+
+            {/* Right arrow */}
+            {currentIndex < Math.ceil(data.gallery.length / 3) - 1 && (
+              <button
+                onClick={() =>
+                  setCurrentIndex((prev) =>
+                    Math.min(prev + 1, Math.ceil(data.gallery.length / 3) - 1)
+                  )
+                }
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md rounded-full p-2 shadow-md hover:bg-white"
+              >
+                ▶
+              </button>
+            )}
+          </div>
         </motion.div>
+
 
         {/* Why Recommended */}
         <motion.div
