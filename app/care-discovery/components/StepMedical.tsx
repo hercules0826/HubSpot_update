@@ -3,20 +3,28 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/Button";
 import { useState } from "react";
 
-export default function StepMedical({
-  next,
-  prev,
-}: {
-  next: () => void;
-  prev: () => void;
-}) {
+export default function StepMedical({ next, prev }: { next: () => void; prev: () => void }) {
   const [careNeeds, setCareNeeds] = useState<string[]>([]);
   const [complexity, setComplexity] = useState<string>("Moderate");
   const [specialNeeds, setSpecialNeeds] = useState<string[]>([]);
 
-  const toggle = (state: string[], setter: any, item: string) => {
+  const maxCareNeeds = 2;
+
+  const toggleCareNeeds = (item: string) => {
+    if (careNeeds.includes(item)) {
+      setCareNeeds(careNeeds.filter((x) => x !== item));
+      return;
+    }
+    if (careNeeds.length < maxCareNeeds) {
+      setCareNeeds([...careNeeds, item]);
+    }
+  };
+
+  const toggleSpecialNeeds = (state: string[], setter: any, item: string) => {
     setter(state.includes(item) ? state.filter((x) => x !== item) : [...state, item]);
   };
+
+  const optionsDisabled = careNeeds.length >= maxCareNeeds;
 
   return (
     <motion.div
@@ -36,8 +44,9 @@ export default function StepMedical({
       {/* Primary Care Needs */}
       <div>
         <h3 className="font-heading text-lg text-sageGreen mb-3">
-          Primary Care Needs (choose up to 2)
+          Primary Care Needs <span className="text-sm text-gray-500">(choose up to 2)</span>
         </h3>
+
         <div className="grid md:grid-cols-2 gap-4">
           {[
             "Independent Living",
@@ -45,19 +54,32 @@ export default function StepMedical({
             "Memory Care",
             "Skilled Nursing",
             "Ongoing Therapy",
-          ].map((opt) => (
-            <button
-              key={opt}
-              onClick={() => toggle(careNeeds, setCareNeeds, opt)}
-              className={`p-4 rounded-2xl border-2 transition-all ${
-                careNeeds.includes(opt)
-                  ? "bg-sageGreen text-white border-sageGreen shadow-md"
-                  : "border-sageMint text-sageGreen hover:bg-sageMint/60"
-              }`}
-            >
-              {opt}
-            </button>
-          ))}
+          ].map((opt) => {
+            const isSelected = careNeeds.includes(opt);
+            const isDisabled = !isSelected && optionsDisabled;
+
+            return (
+              <button
+                key={opt}
+                onClick={() => toggleCareNeeds(opt)}
+                disabled={isDisabled}
+                className={`p-4 rounded-2xl border-2 transition-all
+                  ${
+                    isSelected
+                      ? "bg-sageGreen text-white border-sageGreen shadow-md"
+                      : "border-sageMint text-sageGreen hover:bg-sageMint/60"
+                  }
+                  ${
+                    isDisabled && !isSelected
+                      ? "opacity-40 cursor-not-allowed"
+                      : ""
+                  }
+                `}
+              >
+                {opt}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -97,7 +119,7 @@ export default function StepMedical({
           ].map((opt) => (
             <button
               key={opt}
-              onClick={() => toggle(specialNeeds, setSpecialNeeds, opt)}
+              onClick={() => toggleSpecialNeeds(specialNeeds, setSpecialNeeds, opt)}
               className={`p-4 rounded-2xl border-2 transition-all ${
                 specialNeeds.includes(opt)
                   ? "bg-sageGreen text-white border-sageGreen shadow-md"

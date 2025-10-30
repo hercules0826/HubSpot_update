@@ -1,80 +1,89 @@
-// ...results main page...
 "use client";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import MapView from "./components/MapView";
 import CommunityCard from "./components/CommunityCard";
-
-type Community = {
-  id: number;
-  name: string;
-  priceRange: string;
-  careLevel: string;
-  whyRecommended: string;
-  lat: number;
-  lng: number;
-  address: string;
-  phone: string;
-  image: string;
-};
+import MapView from "./components/MapView";
 
 export default function ResultsPage() {
-  const [communities, setCommunities] = useState<Community[]>([]);
+  const [communities, setCommunities] = useState<any[]>([]);
+  const [selected, setSelected] = useState<number | null>(null);
 
-  // Placeholder data — this will be fetched from HubSpot later
+  localStorage.setItem("sageResults", JSON.stringify([
+    {
+      id: 1,
+      properties: { name: "Brookdale Marlton Crossing", city: "Cherry Hill", state: "NJ" },
+      lat: 39.893715,
+      lng: -74.959640
+    },
+    {
+      id: 2,
+      properties: { name: "Brightview Senior Living", city: "Cherry Hill", state: "NJ" },
+      lat: 39.91020,
+      lng: -75.0089
+    },
+    {
+      id: 3,
+      properties: { name: "Sunrise of Cherry Hill", city: "Cherry Hill", state: "NJ" },
+      lat: 39.9151,
+      lng: -75.0154
+    }
+  ]));
+
   useEffect(() => {
-    setCommunities([
-      {
-        id: 1,
-        name: "Cherry Hill Senior Living",
-        priceRange: "$2,800 – $4,500",
-        careLevel: "Assisted Living, Memory Care",
-        whyRecommended: "Best match for comfort and safety priorities.",
-        lat: 39.9,
-        lng: -75.0,
-        address: "1600 Amphitheatre Parkway, Mountain View, CA 94043",
-        phone: "(856) 555-2025",
-        image: "/images/community1.jpg",
-      },
-      {
-        id: 2,
-        name: "Evergreen Gardens",
-        priceRange: "$3,000 – $5,500",
-        careLevel: "Independent, Assisted Living",
-        whyRecommended: "Close to family and pet-friendly environment.",
-        lat: 39.91,
-        lng: -75.03,
-        address: "456 Oak Ave, Marlton, NJ",
-        phone: "(856) 555-2098",
-        image: "/images/community2.jpg",
-      },
-    ]);
+    const stored = localStorage.getItem("sageResults") ||
+      localStorage.getItem("sage_search_results");
+
+    if (stored) {
+      const data = JSON.parse(stored);
+      const mapped = data.map((r: any) => ({
+        id: r.id,
+        name: r.properties?.name,
+        address: `${r.properties?.city || "Cherry Hill"}, ${r.properties?.state || ""}`,
+        careLevel: "Assisted Living",
+        priceRange: "$4,000 – $6,000",
+        whyRecommended: "Matches your budget & location preferences.",
+        image: "/images/care.png",
+        phone: "(555) 123-4567",
+        lat: r.lat,
+        lng: r.lng,
+      }));
+
+      setCommunities(mapped);
+      setSelected(mapped[0].id); // ✅ default first
+    }
   }, []);
 
   return (
-    <section className="flex flex-col md:flex-row min-h-screen">
-      {/* Left Side — Map */}
-      <div className="md:w-1/2 w-full h-96 md:h-auto sticky top-0">
-        <MapView communities={communities} />
-      </div>
+    <main className="min-h-screen bg-beige p-6 lg:p-10">
+      <h1 className="text-4xl font-heading text-sageGreen text-center mb-10">
+        Recommended Communities
+      </h1>
 
-      {/* Right Side — List */}
-      <div className="md:w-1/2 w-full bg-white p-8 overflow-y-auto">
-        <h1 className="text-3xl font-heading text-sageGreen mb-6 text-center md:text-left">
-          Top Community Matches
-        </h1>
-        <motion.div
-          layout
-          className="flex flex-col gap-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {communities.map((c) => (
-            <CommunityCard key={c.id} community={c} />
-          ))}
-        </motion.div>
-      </div>
-    </section>
+      {communities.length > 0 ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+          {/* LEFT — MAP */}
+          <div className="h-[50vh] lg:h-[85vh] sticky top-24 rounded-2xl overflow-hidden shadow-md">
+            <MapView communities={communities} selectedId={selected} />
+          </div>
+
+          {/* RIGHT — CARDS LIST */}
+          <div className="flex flex-col gap-6 max-h-[85vh] overflow-y-auto pr-3">
+            {communities.map((c) => (
+              <div
+                key={c.id}
+                onClick={() => setSelected(c.id)}
+                className={`cursor-pointer transition-all ${
+                  selected === c.id ? "scale-[1.02]" : "opacity-80 hover:opacity-100"
+                }`}
+              >
+                <CommunityCard community={c} selected={selected === c.id} />
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <p className="text-center text-grayText">Loading communities...</p>
+      )}
+    </main>
   );
 }

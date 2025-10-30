@@ -2,63 +2,111 @@
 import { useState } from "react";
 import { Button } from "@/components/Button";
 
-export default function AddListingModal({ onClose }: { onClose: () => void }) {
+export default function AddListingModal({ onClose, onAdded }: any) {
   const [form, setForm] = useState({
+    photo: "",
+    domain: "",
     name: "",
-    address: "",
+    owner: "",
+    industry: "",
+    type: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    employees: "",
+    revenue: "",
+    timezone: "",
+    description: "",
     priceRange: "",
-    careType: "",
-    amenities: "",
-    photos: "",
     phone: "",
     email: "",
+    website: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: any) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = () => {
-    console.log("New listing submitted:", form);
-    alert("Listing added successfully!");
-    onClose();
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/communities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("Failed to submit listing");
+      onAdded?.();
+      onClose();
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4">
-      <div className="bg-white rounded-3xl shadow-xl p-8 w-full max-w-2xl relative">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-6 text-sageGreen text-2xl hover:text-sageHover"
-        >
+    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-2xl p-8 max-w-3xl w-full border border-sageMint/40 relative">
+        
+        {/* Close */}
+        <button onClick={onClose} className="absolute right-6 top-4 text-2xl">
           ✕
         </button>
 
-        <h2 className="text-2xl font-heading text-sageGreen mb-6">
+        <h2 className="text-3xl text-center font-heading text-sageGreen mb-6">
           Add New Listing
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Object.keys(form).map((key) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto pr-2">
+
+          {[
+            ["photo", "Community Photo (URL)"],
+            ["domain", "Company Domain"],
+            ["name", "Company Name"],
+            ["owner", "Company Owner"],
+            ["industry", "Industry"],
+            ["type", "Type"],
+            ["city", "City"],
+            ["state", "State/Region"],
+            ["postalCode", "Postal Code"],
+            ["employees", "Number of Employees"],
+            ["revenue", "Annual Revenue"],
+            ["timezone", "Time Zone"],
+            ["priceRange", "Price Range"],
+            ["phone", "Phone"],
+            ["email", "Email"],
+            ["website", "Website"],
+          ].map(([key, label]) => (
             <div key={key}>
-              <label className="block text-sm font-medium mb-1 capitalize text-grayText">
-                {key}
-              </label>
+              <label className="text-sm font-medium">{label}</label>
               <input
-                type="text"
                 name={key}
                 value={(form as any)[key]}
                 onChange={handleChange}
-                className="w-full border-2 border-sageMint rounded-xl p-3 focus:outline-none focus:border-sageGreen"
+                className="w-full border-2 border-sageMint rounded-xl p-2"
               />
             </div>
           ))}
+
+          <div className="md:col-span-2">
+            <label className="text-sm font-medium">Description</label>
+            <textarea
+              name="description"
+              rows={4}
+              value={form.description}
+              onChange={handleChange}
+              className="w-full border-2 border-sageMint rounded-xl p-2"
+            />
+          </div>
+
         </div>
 
-        <div className="flex justify-end gap-3 mt-8">
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
+        {/* Footer */}
+        <div className="flex justify-end gap-3 mt-4">
+          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={handleSubmit} className="bg-sageGreen text-white">
+            {loading ? "Submitting..." : "Submit Listing"}
           </Button>
-          <Button onClick={handleSubmit}>Save Listing</Button>
         </div>
       </div>
     </div>
