@@ -69,7 +69,7 @@ export default function FAQPoliciesManager() {
         {["faq", "policy"].map((t) => (
           <Button
             key={t}
-            variant={newItem.type === t ? "default" : "secondary"}
+            variant={newItem.type === t ? "primary" : "secondary"}
             onClick={() => setNewItem({ ...newItem, type: t })}
           >
             {t === "faq" ? "FAQs" : "Policies"}

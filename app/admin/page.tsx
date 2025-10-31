@@ -6,7 +6,7 @@ import EditListingModal from "./components/EditListingModal";
 import ListingTable from "./components/ListingTable";
 import StatsOverview from "./components/StatsOverview";
 import AnalyticsDashboard from "./components/AnalyticsDashboard";
-import FAQPoliciesManager from "./components/FAQPolicesManager";
+import FAQPolicesManager from "./components/FAQPolicesManager";
 import { Button } from "@/components/Button";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -77,7 +77,7 @@ export default function AdminPage() {
         {/* Overview + Analytics */}
         <StatsOverview />
         <AnalyticsDashboard />
-        <FAQPoliciesManager />
+        <FAQPolicesManager />
 
         {/* Dynamic Listings Table */}
         <motion.div
