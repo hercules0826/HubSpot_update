@@ -1,8 +1,7 @@
 "use client";
-import { useState } from "react";
 import { Button } from "@/components/Button";
 
-type Listing = {
+export type Listing = {
   id: number;
   name: string;
   careType: string;
@@ -10,35 +9,28 @@ type Listing = {
   status: "active" | "pending" | "declined";
 };
 
-export default function ListingTable({
-  onEdit,
-}: {
+type Props = {
+  listings: Listing[];                         // ✅ Now comes from backend
   onEdit: (listing: Listing) => void;
-}) {
-  const [listings, setListings] = useState<Listing[]>([
-    {
-      id: 1,
-      name: "Evergreen Gardens",
-      careType: "Assisted Living",
-      priceRange: "$3,200–$5,000",
-      status: "active",
-    },
-    {
-      id: 2,
-      name: "Cherry Hill Senior Living",
-      careType: "Memory Care",
-      priceRange: "$2,800–$4,200",
-      status: "pending",
-    },
-  ]);
+  onRefresh: () => void;                       // ✅ Refresh from API
+};
 
-  const updateStatus = (id: number, newStatus: Listing["status"]) =>
-    setListings((prev) =>
-      prev.map((l) => (l.id === id ? { ...l, status: newStatus } : l))
-    );
+export default function ListingTable({ listings, onEdit, onRefresh }: Props) {
 
-  const remove = (id: number) =>
-    setListings((prev) => prev.filter((l) => l.id !== id));
+  const updateStatus = async (id: number, newStatus: Listing["status"]) => {
+    await fetch(`/api/communities/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus }),
+    });
+
+    onRefresh(); // ✅ Fetch fresh data
+  };
+
+  const remove = async (id: number) => {
+    await fetch(`/api/communities/${id}`, { method: "DELETE" });
+    onRefresh(); // ✅ Refresh table
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-x-auto">
@@ -52,6 +44,7 @@ export default function ListingTable({
             <th className="p-4 text-right">Actions</th>
           </tr>
         </thead>
+
         <tbody>
           {listings.map((l) => (
             <tr
@@ -74,23 +67,23 @@ export default function ListingTable({
                   {l.status}
                 </span>
               </td>
+
               <td className="p-4 text-right space-x-2">
                 {l.status === "pending" && (
                   <>
                     <Button onClick={() => updateStatus(l.id, "active")}>
                       Approve
                     </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() => updateStatus(l.id, "declined")}
-                    >
+                    <Button variant="secondary" onClick={() => updateStatus(l.id, "declined")}>
                       Decline
                     </Button>
                   </>
                 )}
+
                 <Button variant="secondary" onClick={() => onEdit(l)}>
                   Edit
                 </Button>
+
                 <Button variant="secondary" onClick={() => remove(l.id)}>
                   Remove
                 </Button>
@@ -98,6 +91,7 @@ export default function ListingTable({
             </tr>
           ))}
         </tbody>
+
       </table>
     </div>
   );

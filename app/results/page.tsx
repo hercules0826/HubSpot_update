@@ -7,26 +7,28 @@ export default function ResultsPage() {
   const [communities, setCommunities] = useState<any[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
 
-  localStorage.setItem("sageResults", JSON.stringify([
-    {
-      id: 1,
-      properties: { name: "Brookdale Marlton Crossing", city: "Cherry Hill", state: "NJ" },
-      lat: 39.893715,
-      lng: -74.959640
-    },
-    {
-      id: 2,
-      properties: { name: "Brightview Senior Living", city: "Cherry Hill", state: "NJ" },
-      lat: 39.91020,
-      lng: -75.0089
-    },
-    {
-      id: 3,
-      properties: { name: "Sunrise of Cherry Hill", city: "Cherry Hill", state: "NJ" },
-      lat: 39.9151,
-      lng: -75.0154
-    }
-  ]));
+  if (typeof window !== "undefined") {
+    localStorage.setItem("sageResults", JSON.stringify([
+      {
+        id: 1,
+        properties: { name: "Brookdale Marlton Crossing", city: "Cherry Hill", state: "NJ" },
+        lat: 39.893715,
+        lng: -74.959640
+      },
+      {
+        id: 2,
+        properties: { name: "Brightview Senior Living", city: "Cherry Hill", state: "NJ" },
+        lat: 39.91020,
+        lng: -75.0089
+      },
+      {
+        id: 3,
+        properties: { name: "Sunrise of Cherry Hill", city: "Cherry Hill", state: "NJ" },
+        lat: 39.9151,
+        lng: -75.0154
+      }
+    ]));
+  }
 
   useEffect(() => {
     const stored = localStorage.getItem("sageResults") ||

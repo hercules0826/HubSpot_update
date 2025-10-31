@@ -23,11 +23,18 @@ export const { handlers:{GET, POST}, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       name: "Credentials",
-      credentials: { email: { type: "email" }, password: { type: "password" } },
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
       async authorize(credentials) {
-        const user = users.find((u) => u.email === credentials?.email);
+        const email = credentials?.email as string;
+        const password = credentials?.password as string;
+
+        const user = users.find((u) => u.email === email);
         if (!user) return null;
-        const valid = await bcrypt.compare(credentials.password!, user.password);
+
+        const valid = await bcrypt.compare(password, user.password);
         return valid ? user : null;
       },
     }),
@@ -38,7 +45,7 @@ export const { handlers:{GET, POST}, auth, signIn, signOut } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      session.user.role = token.role;
+      session.user.role = token.role as string;
       return session;
     },
   },

@@ -1,19 +1,37 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
-export async function middleware(req: Request) {
-  const session = await auth();
+export default auth((req) => {
+  const { nextUrl } = req;
+  const session = req.auth;
 
-  // protect all /admin routes
-  const url = new URL(req.url);
-  if (url.pathname.startsWith("/admin") && !session?.user) {
+  const isAuthPage = nextUrl.pathname.startsWith("/login");
+  const isAdminPage = nextUrl.pathname.startsWith("/admin");
+
+  // ✅ Not logged in → must log in
+  if (!session && !isAuthPage) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  return NextResponse.next();
-}
+  // ✅ Logged in → prevent going back to /login
+  if (session && isAuthPage) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 
-// optional: limit middleware scope
+  // ✅ Staff can't access admin
+  if (isAdminPage && session?.user?.role !== "admin") {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  return NextResponse.next();
+});
+
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/care-discovery/:path*",
+    "/community/:path*",
+    "/results/:path*",
+    "/login",
+  ],
 };

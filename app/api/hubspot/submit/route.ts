@@ -1,5 +1,9 @@
+export const runtime = "nodejs";
+
 import { NextResponse } from "next/server";
 import Hubspot from "@hubspot/api-client";
+import { FilterOperatorEnum as CompanyOp } from "@hubspot/api-client/lib/codegen/crm/companies";
+import { FilterOperatorEnum as ContactOp } from "@hubspot/api-client/lib/codegen/crm/contacts";
 import nodemailer from "nodemailer";
 import twilio from "twilio";
 
@@ -20,7 +24,7 @@ export async function POST(req: Request) {
           filters: [
             {
               propertyName: "name",
-              operator: "CONTAINS_TOKEN",
+              operator: CompanyOp.ContainsToken,
               value: query,
             },
           ],
@@ -48,7 +52,13 @@ export async function POST(req: Request) {
     const searchContact = await hubspot.crm.contacts.searchApi.doSearch({
       filterGroups: [
         {
-          filters: [{ propertyName: "email", operator: "EQ", value: family.email }],
+          filters: [
+            { 
+              propertyName: "email", 
+              operator: ContactOp.Eq, 
+              value: family.email 
+            }
+          ],
         },
       ],
       limit: 1,
@@ -81,7 +91,7 @@ export async function POST(req: Request) {
           to: { id: contactId },
           types: [
             {
-              associationCategory: "HUBSPOT_DEFINED",
+              associationCategory: "HUBSPOT_DEFINED" as any,
               associationTypeId: 3, // contact-to-deal
             },
           ],

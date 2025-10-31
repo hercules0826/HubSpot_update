@@ -39,7 +39,7 @@ export default function StepFinancial({ prev }: { prev: () => void }) {
       });
 
       const data = await res.json();
-
+      // console.log(data)
       if (data.ok) {
         localStorage.setItem("sageResults", JSON.stringify(data.top3));
         router.replace("/results");
