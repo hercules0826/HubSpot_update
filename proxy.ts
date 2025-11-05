@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export const proxy = [
   {
     path: "/api/:path*",
-    destination: "https://hubspot-update-vercel.app/api/:path*",
+    destination: "https://hub-spot-update.vercel.app/api/:path*",
   },
 ];
 
