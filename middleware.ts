@@ -1,14 +1,6 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
-export const proxy = [
-  {
-    path: "/api/hubspot/:path*",
-    destination: "https://api.hubspot.com/:path*",
-  },
-];
-
-
 export default auth((req) => {
   const { nextUrl } = req;
   const session = req.auth;
