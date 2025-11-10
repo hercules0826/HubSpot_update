@@ -35,14 +35,14 @@ export async function POST(req: Request) {
     };
 
     const companiesRes = await fetch(
-      "https://api.hubapi.com/crm/v3/objects/companies/search",
+      "https://api.hubapi.com/crm/v3/objects/companies",
       {
-        method: "POST",
+        method: "GET",
         headers: {
           Authorization: `Bearer ${process.env.HUBSPOT_PRIVATE_APP_TOKEN}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(searchBody),
+        // body: JSON.stringify(searchBody),
       }
     );
     const companiesData = await companiesRes.json();
