@@ -13,6 +13,7 @@
     "@hubspot/api-client": "^13.4.0",
     "bcryptjs": "^3.0.2",
     "framer-motion": "^12.23.24",
+    "lucide-react": "^0.553.0",
     "mapbox-gl": "^3.16.0",
     "next": "^16.0.1",
     "next-auth": "^5.0.0-beta.20",

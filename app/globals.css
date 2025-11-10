@@ -21,3 +21,20 @@ a:focus, button:focus {
   outline: 2px solid #F5E9D2;
   outline-offset: 3px;
 }
+
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-80px) rotate(20deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+.animate-float {
+  animation: float linear infinite;
+}
