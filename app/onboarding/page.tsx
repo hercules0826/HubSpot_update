@@ -56,17 +56,17 @@ export default function OnboardingPage() {
           <Input label="Email" name="email" type="email" value={form.email} onChange={handleChange} />
           <Input label="Phone Number" name="phone" value={form.phone} onChange={handleChange} />
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4">
             <Input label="Age" name="age" type="number" value={form.age} onChange={handleChange} />
             <Select label="Gender" name="gender" value={form.gender} onChange={handleChange}
                     options={["Male", "Female", "Other"]} />
-          </div>
+          </div> */}
 
-          <Input label="Country" name="country" value={form.country} onChange={handleChange} />
+          {/* <Input label="Country" name="country" value={form.country} onChange={handleChange} />
           <Input label="State / Province" name="state" value={form.state} onChange={handleChange} />
           <Input label="City" name="city" value={form.city} onChange={handleChange} />
           <Input label="Street Address" name="street" value={form.street} onChange={handleChange} />
-          <Input label="ZIP Code" name="zip" value={form.zip} onChange={handleChange} />
+          <Input label="ZIP Code" name="zip" value={form.zip} onChange={handleChange} /> */}
 
           <button
             type="submit"

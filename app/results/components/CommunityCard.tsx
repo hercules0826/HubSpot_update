@@ -17,7 +17,8 @@ export default function CommunityCard({
     .replace(/(^-|-$)+/g, "");
 
   const handleVisitPage = () => {
-    router.push(`/community/${slug}`);
+    // router.push(`/community/${slug}`);
+    router.push(`/community/`);
   };
 
   return (

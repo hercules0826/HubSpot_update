@@ -11,19 +11,19 @@ export default function ResultsPage() {
     localStorage.setItem("sageResults", JSON.stringify([
       {
         id: 1,
-        properties: { name: "Brookdale Marlton Crossing", city: "Cherry Hill", state: "NJ" },
+        properties: { name: "Brookdale Marlton Crossing", city: "Cherry Hill", state: "NJ", image: "/images/care.png", priceRange: "$4,000 – $6,000"},
         lat: 39.893715,
         lng: -74.959640
       },
       {
         id: 2,
-        properties: { name: "Brightview Senior Living", city: "Cherry Hill", state: "NJ" },
+        properties: { name: "Brightview Senior Living", city: "Cherry Hill", state: "NJ", image: "/images/1.jpg", priceRange: "$4,000 – $6,000" },
         lat: 39.91020,
         lng: -75.0089
       },
       {
         id: 3,
-        properties: { name: "Sunrise of Cherry Hill", city: "Cherry Hill", state: "NJ" },
+        properties: { name: "Sunrise of Cherry Hill", city: "Cherry Hill", state: "NJ", image: "/images/2.jpg", priceRange: "$4,000 – $6,000" },
         lat: 39.9151,
         lng: -75.0154
       }
@@ -41,9 +41,9 @@ export default function ResultsPage() {
         name: r.properties?.name,
         address: `${r.properties?.city || "Cherry Hill"}, ${r.properties?.state || ""}`,
         careLevel: "Assisted Living",
-        priceRange: "$4,000 – $6,000",
+        priceRange: r.properties?.priceRange || "$4,000 – $6,000",
         whyRecommended: "Matches your budget & location preferences.",
-        image: "/images/care.png",
+        image: r.properties?.image,
         phone: "(555) 123-4567",
         lat: r.lat,
         lng: r.lng,

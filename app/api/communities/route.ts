@@ -1,3 +1,4 @@
+import { stat } from "fs";
 import { NextResponse } from "next/server";
 
 const HUBSPOT_API = "https://api.hubapi.com/crm/v3/objects/companies";
@@ -19,6 +20,8 @@ export async function GET() {
     const listings = (data.results || []).map((item: any) => ({
       id: item.id,
       name: item.properties?.name || "",
+      domain: item.properties?.domain || "",
+      url: item.url,
       address: item.properties?.address || "",
       city: item.properties?.city || "",
       state: item.properties?.state || "",
@@ -29,6 +32,7 @@ export async function GET() {
         ? item.properties.amenities.split(",").map((a: string) => a.trim())
         : [],
       priceRange: item.properties?.price_range || "",
+      status: item.properties?.status || "active",
     }));
 
     return NextResponse.json(listings);
