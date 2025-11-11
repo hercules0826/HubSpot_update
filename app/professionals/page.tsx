@@ -72,7 +72,7 @@ export default function ProfessionalsPage() {
           Let’s work together to bring peace of mind to families.
         </p>
         <Link
-          href="/contact"
+          href={`mailto:RitaRivera@SAGEaids.com?subject=Help%20me%20with%20Senior%20Living&body=Hello%20SAGE%20Team,%0D%0A%0D%0AI would like assistance with finding senior living options.%0D%0A%0D%0AThank you.`}
           className="bg-white text-sageGreen px-8 py-3 rounded-xl font-semibold hover:bg-sageMint/20 transition-all shadow-sm"
         >
           Contact Us

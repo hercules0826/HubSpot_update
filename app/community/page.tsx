@@ -2,7 +2,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { useState } from "react";
 
 
@@ -36,6 +36,7 @@ const communityData = {
 };
 
 export default function CommunityPage({ params }: { params: { slug: string } }) {
+  const router = useRouter();
   const data = communityData;
   const [currentIndex, setCurrentIndex] = useState(0);
   if (!data) return notFound();
@@ -77,7 +78,7 @@ export default function CommunityPage({ params }: { params: { slug: string } }) 
 
             <input
               type="text"
-              placeholder="Search by name..."
+              placeholder="Search by Amenities..."
               className="w-full border border-sageMint rounded-lg p-3 mb-4 focus:border-sageGreen focus:ring-1 focus:ring-sageMint"
             />
 
@@ -103,7 +104,7 @@ export default function CommunityPage({ params }: { params: { slug: string } }) 
               <option>$7,500+</option>
             </select>
 
-            <button className="w-full bg-sageGreen text-white py-3 rounded-xl font-semibold hover:bg-sageHover transition-all">
+            <button onClick={() => router.push("/results")} className="w-full bg-sageGreen text-white py-3 rounded-xl font-semibold hover:bg-sageHover transition-all">
               Apply Filters
             </button>
           </aside>
@@ -262,9 +263,32 @@ export default function CommunityPage({ params }: { params: { slug: string } }) 
                     {data.contact.email}
                   </a>
                 </p>
-                <button className="bg-white text-sageGreen px-8 py-3 rounded-xl font-semibold hover:bg-sageMint/20 transition-all">
-                  Contact Community
-                </button>
+                 {/* ✅ Button Group */}
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+                      {/* Contact Community */}
+                      <a
+                        href={`mailto:${data.contact.email}?subject=Interest%20in%20${encodeURIComponent(
+                          data.name
+                        )}%20Community&body=Hello,%0D%0A%0D%0AI would like more information about the community: ${encodeURIComponent(
+                          data.name
+                        )}.%0D%0A%0D%0AThank you.`}
+                      >
+                        <button className="bg-white text-sageGreen px-8 py-3 rounded-xl font-semibold hover:bg-sageMint/20 transition-all w-full sm:w-auto">
+                          Contact Community
+                        </button>
+                      </a>
+
+                      {/* Contact SAGE */}
+                      <a
+                        href={`mailto:RitaRivera@SAGEaids.com?subject=Help%20me%20with%20Senior%20Living&body=Hello%20SAGE%20Team,%0D%0A%0D%0AI would like assistance with finding senior living options.%0D%0A%0D%0AThank you.`}
+                      >
+                        <button className="bg-sageMint text-sageGreen px-8 py-3 rounded-xl font-semibold hover:bg-white/20 transition-all w-full sm:w-auto">
+                          Contact SAGE
+                        </button>
+                      </a>
+
+                    </div>
               </motion.div>
             </section>
         </div>

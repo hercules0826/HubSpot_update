@@ -5,8 +5,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useSession, signOut } from "next-auth/react";
-
-
+import Image from "next/image";
 
 export default function Header() {
   const pathname = usePathname();
@@ -35,10 +34,14 @@ export default function Header() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            className="flwx items-center"
           >
-            <span className="bg-sageMint/30 px-2 py-1 rounded-lg shadow-sm">
-              SAGE<span className="text-sageHover">.</span>
-            </span>
+            <Image src="/images/SAGE Logo.png"
+              alt="SAGE Logo"
+              width={60}          // ✅ adjust smoothly
+              height={60}
+              className="object-contain select-none"
+              priority />
           </motion.span>
         </Link>
 

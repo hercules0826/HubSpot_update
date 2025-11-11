@@ -13,6 +13,9 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/images/SAGE Logo.png" sizes="any" />
+      </head>
       <body className="font-body bg-beige text-grayText antialiased min-h-screen flex flex-col">
         <SessionProvider>
           <Header />

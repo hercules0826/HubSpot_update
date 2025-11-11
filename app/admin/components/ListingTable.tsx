@@ -4,15 +4,15 @@ import { Button } from "@/components/Button";
 export type Listing = {
   id: number;
   name: string;
-  careType: string;
-  priceRange: string;
+  domain: string;           // ✅ New
+  url: string;              // ✅ New
   status: "active" | "pending" | "declined";
 };
 
 type Props = {
-  listings: Listing[];                         // ✅ Now comes from backend
+  listings: Listing[];
   onEdit: (listing: Listing) => void;
-  onRefresh: () => void;                       // ✅ Refresh from API
+  onRefresh: () => void;
 };
 
 export default function ListingTable({ listings, onEdit, onRefresh }: Props) {
@@ -24,12 +24,12 @@ export default function ListingTable({ listings, onEdit, onRefresh }: Props) {
       body: JSON.stringify({ status: newStatus }),
     });
 
-    onRefresh(); // ✅ Fetch fresh data
+    onRefresh();
   };
 
   const remove = async (id: number) => {
     await fetch(`/api/communities/${id}`, { method: "DELETE" });
-    onRefresh(); // ✅ Refresh table
+    onRefresh();
   };
 
   return (
@@ -38,8 +38,8 @@ export default function ListingTable({ listings, onEdit, onRefresh }: Props) {
         <thead className="bg-sageMint/60 text-sageGreen font-heading">
           <tr>
             <th className="p-4">Name</th>
-            <th className="p-4">Care Type</th>
-            <th className="p-4">Price</th>
+            <th className="p-4">Domain</th>         
+            <th className="p-4">URL</th>            
             <th className="p-4">Status</th>
             <th className="p-4 text-right">Actions</th>
           </tr>
@@ -52,8 +52,23 @@ export default function ListingTable({ listings, onEdit, onRefresh }: Props) {
               className="border-b hover:bg-beige/30 transition-all duration-200"
             >
               <td className="p-4 font-medium">{l.name}</td>
-              <td className="p-4">{l.careType}</td>
-              <td className="p-4">{l.priceRange}</td>
+
+              {/* ✅ Domain */}
+              <td className="p-4">{l.domain}</td>
+
+              {/* ✅ URL */}
+              <td className="p-4">
+                <a
+                  href={l.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sageGreen underline hover:text-sageHover"
+                >
+                  {l.url}
+                </a>
+              </td>
+
+              {/* Status */}
               <td className="p-4">
                 <span
                   className={`px-3 py-1 rounded-xl text-sm ${
@@ -68,13 +83,17 @@ export default function ListingTable({ listings, onEdit, onRefresh }: Props) {
                 </span>
               </td>
 
+              {/* Actions */}
               <td className="p-4 text-right space-x-2">
                 {l.status === "pending" && (
                   <>
                     <Button onClick={() => updateStatus(l.id, "active")}>
                       Approve
                     </Button>
-                    <Button variant="secondary" onClick={() => updateStatus(l.id, "declined")}>
+                    <Button
+                      variant="secondary"
+                      onClick={() => updateStatus(l.id, "declined")}
+                    >
                       Decline
                     </Button>
                   </>
@@ -84,14 +103,14 @@ export default function ListingTable({ listings, onEdit, onRefresh }: Props) {
                   Edit
                 </Button>
 
-                <Button variant="secondary" onClick={() => remove(l.id)}>
+                {/* Optional: Remove button */}
+                {/* <Button variant="secondary" onClick={() => remove(l.id)}>
                   Remove
-                </Button>
+                </Button> */}
               </td>
             </tr>
           ))}
         </tbody>
-
       </table>
     </div>
   );
